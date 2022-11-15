@@ -15,6 +15,10 @@
                 </div>
             </div>
         </div>
+        <div class="buttons">
+            <button class="button previous" id="previous" v-on:click="previous ? callingAPI(previous) : ''">Previous</button>
+            <button class="button next" id="next" v-on:click="next ? callingAPI(next) : ''">Next</button>
+        </div>
     </div>
 </template>
 
@@ -23,18 +27,30 @@
         name: 'rickAndMortyAPI',
         data() {
             return {
-                characters: []
+                characters: [],
+                next: '',
+                previous: ''
             }
         },
         methods: {
-            callingAPI() {
-                fetch("https://rickandmortyapi.com/api/character").then(res => res.json().then(json => {
+            callingAPI(url) {
+                fetch(url).then(res => res.json().then(json => {
                     this.characters = json;
+                    this.next = json.info.next;
+                    this.previous = json.info.prev;
                 }))
-            }
+            },
         },
         mounted() {
-            this.callingAPI();
+            this.callingAPI("https://rickandmortyapi.com/api/character");
+            // const nextButton = document.getElementById('next'); 
+            // const prevButton = document.getElementById('previous');              
+            // nextButton.addEventListener("click", () => {
+            //     this.callingAPI(this.next)
+            // });
+            // prevButton.addEventListener("click", () => {
+            //     this.callingAPI(this.previous)
+            // });
         }
     }
 </script>
@@ -58,7 +74,7 @@
 
     .main-container {
         width: 1170px;
-        margin: 0 auto;
+        margin: 0 auto 60px;
         display: flex;
         flex-wrap: wrap;
         background-color: gray;
@@ -113,5 +129,13 @@
     .gray {
         color: #333;
     }
+
+    .buttons {
+        border: 2px solid red;
+        height: 120px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }    
 
 </style>
